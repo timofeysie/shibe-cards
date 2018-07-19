@@ -30,7 +30,115 @@ World Nomad Group JavaScript Excercise 1.
 
 2. You’ll need to use [a proxy](https://github.com/angular/angular-cli/blob/master/docs/documentation/stories/proxy.md) to the backend.
 
-Since no backend is required, have to assuem the API is the backend.  There is a bried discussion on the proxy link of how to do this in various forms on the Angular site.
+
+### The cards should still display their order and turn green when clicked
+
+### Allow users to add more cards if they choose
+
+
+## Other Instructions
+
+*You may choose any JavaScript framework you like, though the Product Owner would prefer Angular. Additionally, you may use any environment, build or UI tools you like.*
+
+*Please try to spend no more than 2 to 3 hours on the exercise and return your work to us within several days. Push your code to git and forward the link to ed@worldnomads.com. We will use your work as a topic of conversation in your next interview.*
+
+*Don’t hesitate to get in touch if you have any questions. Thanks for your effort and good luck.*
+
+
+## Competition
+
+A quick search turned up this repo by [Jay Isada](https://gitlab.com/jlisada/cards).  From a month ago it's a good bet it's from a similar test.  The service returns cats, and there are a few things missing.
+ 
+Jay put all the code in one card file, including the service.  Also, there is no ```proxy.conf.json``` file, although it's not certain that Jay received the same instructions as those above.
+
+
+## Preparations
+
+Getting started with the latest Angular CLI: ```+ @angular/cli@6.0.8```
+
+Create the project ```ng new shibe-cards```
+
+Create a service ```ng g s my-new-service```
+```
+Error compiling schema, function code: var customRule0 = customRules[0];var customRule1 = customRules[1]; 
+...
+ return data;            else throw new ValidationError(vErrors);  }; return validate;
+Unexpected token function
+```
+
+Every time a new tab is opened in the terminal, it reverts back to node 6.
+
+Next register the service as a provider.
+
+The [Angular http page](https://angular.io/guide/http) has a load of steps after this that starts with 
+```app/config/config.service.ts```:
+```
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable()
+export class ConfigService {
+  constructor(private http: HttpClient) { }
+
+    configUrl = 'assets/config.json';
+
+    getConfig() {
+        return this.http.get(this.configUrl);         // v1
+        return this.http.get<Config>(this.configUrl); // v2
+    }
+}
+```
+
+There is a ```assets/config.json``` file:
+```
+{
+  "heroesUrl": "api/heroes",
+  "textfile": "assets/textfile.txt"
+}
+```
+
+```app/config/config.component.ts```
+```
+showConfig() {
+  this.configService.getConfig()
+    .subscribe((data: Config) => this.config = {
+        heroesUrl: data['heroesUrl'],
+        textfile:  data['textfile']
+    });
+}
+
+config: Config;
+
+showConfig() {
+  this.configService.getConfig()
+    // v1
+    .subscribe((data: Config) => this.config = {
+        heroesUrl: data['heroesUrl'],
+        textfile:  data['textfile']
+    });
+    // v2: clone the data object, using its known Config shape
+    .subscribe((data: Config) => this.config = { ...data });
+}
+```
+
+There is type-checking the response
+```
+.subscribe((data: Config) => this.config = {
+    heroesUrl: data['heroesUrl'],
+    textfile:  data['textfile']
+});
+```
+
+And more.  But before getting too far ahead of ourselves, start from a working http call with the basics.  Then, we have our first picture the response url:
+```
+http://cdn.shibe.online/shibes/478bc7eb16eca2d9d74739087d56dbb8fdfbfeb0.jpg
+```
+
+The response just looks like an array, so type-checking would be an overkill here.  Let's just get on with the proxy for now.
+
+### The Proxy
+
+Since no backend is required, have to assume the API is the backend.  There is a brief discussion on the proxy link of how to do this in various forms on the Angular site.
 
 There is a [tutorial on the subject here](https://juristr.com/blog/2016/11/configure-proxy-api-angular-cli/).  It states the reasons for doing this well: *Unless you’re creating some publicly consumable API and you inject the required CORS headers, you’ll most probably get some CORS exceptions.*
 
@@ -66,46 +174,6 @@ The Angular docs say:
       "proxyConfig": "src/proxy.conf.json"
     },
 ```
-
-
-### The cards should still display their order and turn green when clicked
-
-### Allow users to add more cards if they choose
-
-
-## Other Instructions
-
-*You may choose any JavaScript framework you like, though the Product Owner would prefer Angular. Additionally, you may use any environment, build or UI tools you like.*
-
-*Please try to spend no more than 2 to 3 hours on the exercise and return your work to us within several days. Push your code to git and forward the link to ed@worldnomads.com. We will use your work as a topic of conversation in your next interview.*
-
-*Don’t hesitate to get in touch if you have any questions. Thanks for your effort and good luck.*
-
-
-## Competition
-
-https://gitlab.com/jlisada/cards
- 
-Jay put all the code in one card file, including the service.  Also, there is no ```proxy.conf.json``` file, although it's not certain that Jay received the same instructions as those above.
-
-
-## Preparations
-
-Get the latest Angular CLI: ```+ @angular/cli@6.0.8```
-
-Create the project ```ng new shibe-cards```
-
-Create a service ```ng g s my-new-service```
-```
-Error compiling schema, function code: var customRule0 = customRules[0];var customRule1 = customRules[1]; 
-...
- return data;            else throw new ValidationError(vErrors);  }; return validate;
-Unexpected token function
-```
-
-Every time a new tab is opened in the terminal, it reverts back to node 6.
-
-Next register the service as a provider.
 
 
 # 
