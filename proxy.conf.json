@@ -1,0 +1,8 @@
+{
+    "/api/*": {
+      "target": "http://shibe.online",
+      "secure": false,
+      "logLevel": "debug",
+      "changeOrigin": true
+    }
+}

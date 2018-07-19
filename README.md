@@ -175,6 +175,25 @@ The Angular docs say:
     },
 ```
 
+The link provided in the instructions says *We do this by passing a file to --proxy-config*
+So add that to the start script call in the package.json file.
+
+However, the calls fail when running ```ng serve``` again.  Looked at [this StackOverlfow](https://stackoverflow.com/questions/39809008/angular-cli-proxy-to-backend-doesnt-work) answer and added this in the config:
+```
+"pathRewrite": {"^/api" : ""}
+```
+
+But then re-reading the Angular docs it also shows that we had to add the ```"proxyConfig": "proxy.conf.json"``` line in the angular.json file, although that file was not specified in the docs.  If you search for browserTarget, you will find that file.
+
+Then however, this comes out in the startup log:
+```
+[HPM] Proxy rewrite rule created: "^/api" ~> ""
+[HPM] Subscribed to http-proxy events:  [ 'error', 'close' ]
+```
+
+Forgot to remove the line from the StackOverflow answer.  Then the proxy works.
+
+
 
 # 
 
