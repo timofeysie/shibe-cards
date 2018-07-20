@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { resolve } from 'dns';
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +19,7 @@ export class MyNewServiceService {
       const shibeUrl:string = '/api/shibes?count='+count+'&urls=true&httpsUrls=false';
       this.http.get(shibeUrl, {responseType: 'text'})
         .subscribe(data => {
-          console.log('data',data.length);
-          resolve(data);
+          resolve(JSON.parse(data));
         },
         error => { 
           console.log('error getting pic',error);

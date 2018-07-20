@@ -2,55 +2,6 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
 
-# WNG – JavaScript Exercise
-
-World Nomad Group JavaScript Excercise 1.
-
-
-# Instructions
-
-## *You have been asked by your Product Owner to write a single page JavaScript app. with the following requirements*
-
-### The app displays four "cards" numbered 1 - 4. Cards should be 150px * 250px in size
-
-### All the cards are initially “inactive”; inactive cards are red with no text
-
-### Clicking on an inactive card makes it “active” - active cards are green and display the card's order (1-4) inside the card
-
-### Clicking on an active card returns it to the inactive state
-
-### A maximum of one card can be active at any given time
-
-
-## *Your product owner asks you to add an additional feature to the app*
-
-### When the user presses a button, populate each of the cards with images of Shiba Inu dogs
-
-1. Use the [shibe.online API](http://shibe.online/) to populate the cards: http://shibe.online/ 
-
-2. You’ll need to use [a proxy](https://github.com/angular/angular-cli/blob/master/docs/documentation/stories/proxy.md) to the backend.
-
-
-### The cards should still display their order and turn green when clicked
-
-### Allow users to add more cards if they choose
-
-
-## Other Instructions
-
-*You may choose any JavaScript framework you like, though the Product Owner would prefer Angular. Additionally, you may use any environment, build or UI tools you like.*
-
-*Please try to spend no more than 2 to 3 hours on the exercise and return your work to us within several days. Push your code to git and forward the link to ed@worldnomads.com. We will use your work as a topic of conversation in your next interview.*
-
-*Don’t hesitate to get in touch if you have any questions. Thanks for your effort and good luck.*
-
-
-## Competition
-
-A quick search turned up this repo by [Jay Isada](https://gitlab.com/jlisada/cards).  From a month ago it's a good bet it's from a similar test.  The service returns cats, and there are a few things missing.
- 
-Jay put all the code in one card file, including the service.  Also, there is no ```proxy.conf.json``` file, although it's not certain that Jay received the same instructions as those above.
-
 
 ## Getting Started
 
@@ -136,7 +87,7 @@ http://cdn.shibe.online/shibes/478bc7eb16eca2d9d74739087d56dbb8fdfbfeb0.jpg
 
 The response just looks like an array, so type-checking would be an overkill here.  Let's just get on with the proxy for now.
 
-### The Proxy
+## The Proxy
 
 Since no backend is required, have to assume the API is the backend.  There is a brief discussion on the proxy link of how to do this in various forms on the Angular site.
 
@@ -194,7 +145,7 @@ Then however, this comes out in the startup log:
 Forgot to remove the line from the StackOverflow answer.  Then the proxy works.
 
 
-### Testing the service
+## Testing the service
 
 Creating the first new test for this service, all the other tests are broken:
 ```
@@ -231,14 +182,29 @@ We are getting the result as expected in the component.  But because we are retu
  
 However, as half the time allocated to this exercise has already passed, this will have to wait.  Once we have the core functionality down this will be a fun one to fix up.
 
+## Creating the cards
+
+This part was rushed.  The state is kept in each card and also calculated and reset in the parent class.  There should be only one place the state is held.  We have both:
+```
+  @Input() active: boolean;
+  @Output() toggleState ...
+```
+
+This seems a bit off.  But being out of time and rushing the styles, finding a better solution isn't going to happen.
+
+As of now, the UI is not so good.  Given the style guidelines, it probably could never look good with red and greet active cards.  
 
 #
 
-### Notes
+## Notes
 
-Aren't the dogs called 'shiba', not 'shebe'?
+I went in the reverse order of the exercise requirements.  First I created the service to get the data from the API, then I created a card component with the number and image url passed in from the main component.  If there was a direction to start from the beginning and go step by step I wouldn't have done this.
+
+Since the requirements state that a button should populate the cards, I had to backtrack and create the images for the card when this action happens, not when the cards are created as was first implemented.  So it would have been better to start at the beginning after all.
 
 What else could be done?
+
+A spinner indicating the state of the card is needed.  There are various ways to create a method that would let each card manage their own spinner.  Not sure which method I would choose.
 
 A real world backend would most likely include more that just an image url in the response.  A data model with an interface should be used for the result of the API calls.  The service could do type checking like this ```return this.http.get<DataInterface>(```.
 

@@ -1,0 +1,13 @@
+<div class="card"
+  [class.active]="!active"
+  [class.inActive]="active"
+  (click)="changeState()">
+  <div *ngIf="active"
+   [@flyInOut]="active"
+    class="overlay">
+    <span class="cardNumber">{{cardNumber+1}}</span>
+  </div>
+  <div *ngIf="imageUrl">
+      <img [src]="imageUrl">
+  </div>
+</div>

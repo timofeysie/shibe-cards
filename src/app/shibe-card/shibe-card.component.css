@@ -1,0 +1,29 @@
+img {
+    max-width: 150px;
+    max-height: auto;
+    margin: 5px;
+    overflow: hidden;
+}
+.card {
+    min-width: 150px;
+    min-height: 250px;
+}
+.active {
+    background-color: red;
+}
+.inActive {
+    background-color: green;
+}
+.overlay {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    width: 20px;
+    background-color: whitesmoke;
+}
+.cardNumber {
+    margin: 5px;
+}
