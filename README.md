@@ -52,7 +52,7 @@ A quick search turned up this repo by [Jay Isada](https://gitlab.com/jlisada/car
 Jay put all the code in one card file, including the service.  Also, there is no ```proxy.conf.json``` file, although it's not certain that Jay received the same instructions as those above.
 
 
-## Preparations
+## Getting Started
 
 Getting started with the latest Angular CLI: ```+ @angular/cli@6.0.8```
 
@@ -193,7 +193,10 @@ Then however, this comes out in the startup log:
 
 Forgot to remove the line from the StackOverflow answer.  Then the proxy works.
 
-Then, creating the first new test for this service, all the other tests are broken:
+
+### Testing the service
+
+Creating the first new test for this service, all the other tests are broken:
 ```
 Chrome 67.0.3396 (Mac OS X 10.10.5) AppComponent should create the app FAILED
 	  StaticInjectorError(Platform: core)[HttpClient]: 
@@ -202,6 +205,44 @@ Chrome 67.0.3396 (Mac OS X 10.10.5) AppComponent should create the app FAILED
 	    at NullInjector.push../node_modules/@angular/core/fesm5/core.js.NullInjector.get node_modules/@angular/core/fesm5/core.js:1034:1)
 ```
 
+Just following [the http service testing documentation](https://angular.io/guide/http#testing-http-requests) wasn't enough.
+Turns out this has to be imported in the component test class as well:
+```
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+```
+
+It also has to be added to the ```TestBed.configureTestingModule``` imports array:
+```
+    TestBed.configureTestingModule({
+      imports: [ HttpClientTestingModule ]  
+```
+
+Then, after adding error handling and returning the result of the API call, the last two tests are failing:
+```
+Chrome 67.0.3396 (Mac OS X 10.10.5): Executed 4 of 6 SUCCESS (0 secs / 0.165 secs)
+Chrome 67.0.3396 (Mac OS X 10.10.5) MyNewServiceService can test HttpClient.get FAILED
+	Error: Expected one matching request for criteria "Match URL: /api/shibes?count=1&urls=true&httpsUrls=false", found none.
+  ...
+Chrome 67.0.3396 (Mac OS X 10.10.5) MyNewServiceService can test for 404 error FAILED
+	Expected undefined to equal 404.  
+```
+
+We are getting the result as expected in the component.  But because we are returning a promise now, we have these problems.
+ 
+However, as half the time allocated to this exercise has already passed, this will have to wait.  Once we have the core functionality down this will be a fun one to fix up.
+
+
+#
+
+### Notes
+
+Aren't the dogs called 'shiba', not 'shebe'?
+
+What else could be done?
+
+A real world backend would most likely include more that just an image url in the response.  A data model with an interface should be used for the result of the API calls.  The service could do type checking like this ```return this.http.get<DataInterface>(```.
+
+When it's clear what the app will be used for and how it can be organized, a directory structure could be created that suits the purpose and uses of the files.  If it's feature directories or grouped by type, that depends on if we are building a game, a tool, or whatever.
 
 
 # 
